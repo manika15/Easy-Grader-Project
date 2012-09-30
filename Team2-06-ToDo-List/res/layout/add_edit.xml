@@ -50,7 +50,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:hint="@string/login_page_txt_usrname_hint"
+                android:hint="@string/add_item_name"
                 android:inputType="textPersonName"
                 android:maxLines="1" >
             </EditText>

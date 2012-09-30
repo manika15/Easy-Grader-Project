@@ -28,7 +28,7 @@
     <string name="main_txt_hide">Hide</string>
     <string name="signup_heading">Please fill in the details.</string>
     <string name="txt_cancel">Cancel</string>
-    <string name="add_item_name">Task</string>
+    <string name="add_item_name">Task Name</string>
     <string name="add_item_priority">Priority</string>
     <string name="add_item_date">Due Date</string>
     <string name="add_item_note">Description</string>
