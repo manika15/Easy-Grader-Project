@@ -57,8 +57,8 @@
     android:paddingTop="10dp">
             
             <Button 
-                   android:id="@+id/btn_main_delete"
-                  android:text="@string/main_txt_hide"
+                   android:id="@+id/btn_main_add"
+                  android:text="@string/main_btn_add"
                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
@@ -69,8 +69,8 @@
               </Button>
 
               <Button 
-                   android:id="@+id/btn_hide"
-                  android:text="@string/main_btn_delete"
+                   android:id="@+id/btn_main_logout"
+                  android:text="@string/main_btn_logout"
                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                     android:textColor="@android:color/white" 

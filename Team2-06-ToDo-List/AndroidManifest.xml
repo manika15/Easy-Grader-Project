@@ -30,7 +30,11 @@
         </activity>
          <activity
             android:name=".AddEditActivity"
-            android:label="Add or Edit items" >            
+            android:label="Add items" >            
+        </activity>
+        <activity
+            android:name=".EditActivity"
+            android:label="Edit items" >            
         </activity>
          <activity
             android:name=".HiddenItemsActivity"

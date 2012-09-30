@@ -77,10 +77,35 @@
                 android:textColor="@android:color/black" >
             </TextView>
 
-            <DatePicker
+         <!--     <DatePicker
                 android:id="@+id/datePicker1"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content" /> -->
+                
+                 <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent">
+                
+                <ImageButton
+                 android:gravity="center"
+                 android:id="@+id/ImageButton_DueDate"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/calendar"
+                 android:background="@null"
+                 android:padding="3dip" >
+                </ImageButton>
+                
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:text="start date"
+                    android:textColor="@android:color/black"
+                    android:id="@+id/TextView_StartDate">
+                </TextView>
+             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"

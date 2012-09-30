@@ -10,16 +10,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:paddingTop="10dp"
-        android:textStyle="bold"
-        android:text="@string/signup_heading" >
+        android:text="@string/signup_heading"
+        android:textStyle="bold" >
     </TextView>
 
+    <RelativeLayout
+   android:layout_width="wrap_content" 
+   android:layout_height="wrap_content"  >
     <ScrollView
         android:id="@+id/ScrollViewLogin"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="55dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
@@ -38,12 +41,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
-                android:text="@string/login_page_txt_usrname"
+                android:text="@string/add_item_name"
                 android:textColor="@android:color/black" >
             </TextView>
 
             <EditText
-                android:id="@+id/EditText_signup_usrname"
+                android:id="@+id/EditText_edit_task"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
@@ -56,64 +59,81 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
-                android:text="@string/login_page_txt_pass"
+                android:text="@string/add_item_priority"
                 android:textColor="@android:color/black" >
             </TextView>
 
-            <EditText
-                android:id="@+id/EditText_signup_pass"
+            <Spinner
+                android:id="@+id/spinner_edit_Priority"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:hint="@string/login_page_txt_pass_hint"
-                android:inputType="textPassword"
-                android:maxLines="1" >
-            </EditText>
-            
-             <TextView
+                android:entries="@array/priority" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
-                android:text="@string/signup_confirm_pass"
+                android:text="@string/add_item_date"
                 android:textColor="@android:color/black" >
             </TextView>
 
-            <EditText
-                android:id="@+id/EditText_signup_pass_confirm"
+         <!--     <DatePicker
+                android:id="@+id/datePicker1"
                 android:layout_width="fill_parent"
+                android:layout_height="wrap_content" /> -->
+                
+                 <LinearLayout
+                android:orientation="horizontal"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:hint="@string/login_page_txt_pass_hint"
-                android:inputType="textPassword"
-                android:maxLines="1" >
-            </EditText>
-            
-             <TextView
+                android:layout_width="fill_parent">
+                
+                <ImageButton
+                 android:gravity="center"
+                 android:id="@+id/ImageButton_edit_DueDate"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/calendar"
+                 android:background="@null"
+                 android:padding="3dip" >
+                </ImageButton>
+                
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:text="start date"
+                    android:textColor="@android:color/black"
+                    android:id="@+id/TextView_edit_StartDate">
+                </TextView>
+             </LinearLayout>
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="4dp"
-                android:text="@string/login_page_txt_email"
+                android:text="@string/add_item_note"
                 android:textColor="@android:color/black" >
             </TextView>
 
             <EditText
-                android:id="@+id/EditText_signup_email"
+                android:id="@+id/edit_edit_Note"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:hint="@string/login_page_txt_email_hint"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
                 android:maxLines="1" >
             </EditText>
         </LinearLayout>
     </ScrollView>
 
-          <RelativeLayout android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
-            
-            <Button 
-                   android:id="@+id/btn_main_signup"
-                  android:text="@string/title_activity_Signup"
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+ 		android:layout_alignParentBottom="true" >
+        
+         <Button 
+                   android:id="@+id/btn_edit_save"
+                  android:text="@string/btn_save"
                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
@@ -124,8 +144,8 @@
               </Button>
 
               <Button 
-                   android:id="@+id/btn_signup_cancel"
-                  android:text="@string/txt_cancel"
+                   android:id="@+id/btn_edit_cancel"
+                  android:text="@string/btn_cancel"
                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                     android:textColor="@android:color/white" 
@@ -135,6 +155,9 @@
                     android:layout_marginRight="15dp"
                     android:background="@drawable/btn_bg">
               </Button>
-            
-    </RelativeLayout>
+	
+    </RelativeLayout> 
+</RelativeLayout>
+   
+
 </LinearLayout>
