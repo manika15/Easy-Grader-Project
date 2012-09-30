@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -104,6 +107,37 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+		
+		Button btn_logout = (Button)findViewById(R.id.btn_main_logout);
+		btn_logout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				final AlertDialog Hide_dialog = new AlertDialog.Builder(v.getContext()).create();
+				Hide_dialog.setTitle("Confirm Hide");
+				Hide_dialog.setMessage("Are you sure you want to logout?");
+				
+				Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
+				
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						moveTaskToBack(true);
+					}
+				});
+				
+				Hide_dialog.setButton2("No", new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						Hide_dialog.cancel();
+					}
+				});
+				
+		    	Hide_dialog.show();
+				
+			}
+		});
 	}
 
 	//	@Override
@@ -128,11 +162,29 @@ public class MainActivity extends Activity {
 		case SetPrioritySort:
 			break;
 		case Delete:
-			datasource.deleteItem(str_id);
-			ListView lst_todo = (ListView)findViewById(R.id.main_listView);
-			fillData();
-			EfficientAdapter adapter = new EfficientAdapter(this);
-			lst_todo.setAdapter(adapter);
+			final AlertDialog Hide_dialog = new AlertDialog.Builder(this).create();
+			Hide_dialog.setTitle("Confirm Hide");
+			Hide_dialog.setMessage("Are you sure you want to delete");
+			
+			Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
+			
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					delete_items();
+				}
+			});
+			
+			Hide_dialog.setButton2("No", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO Auto-generated method stub
+					Hide_dialog.cancel();
+				}
+			});
+			
+	    	Hide_dialog.show();
+			
+			
 			break;
 		case Edit:
 			Intent intent = new Intent(MainActivity.this, EditActivity.class);
@@ -143,6 +195,15 @@ public class MainActivity extends Activity {
 
 		}
 		return super.onContextItemSelected(item);
+	}
+	
+	private void delete_items()
+	{
+		datasource.deleteItem(str_id);
+			ListView lst_todo = (ListView)findViewById(R.id.main_listView);
+			fillData();
+			EfficientAdapter adapter = new EfficientAdapter(this);
+			lst_todo.setAdapter(adapter);
 	}
 
 	@Override
@@ -155,13 +216,13 @@ public class MainActivity extends Activity {
 		menu.add(0, Edit, 3, "Edit");
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		menu.findItem(R.id.menu_item_new).setIntent(new Intent(MainActivity.this, AddEditActivity.class));
-		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(MainActivity.this, HiddenItemsActivity.class));
-		return true;
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		getMenuInflater().inflate(R.menu.activity_main, menu);
+//		menu.findItem(R.id.menu_item_new).setIntent(new Intent(MainActivity.this, AddEditActivity.class));
+//		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(MainActivity.this, HiddenItemsActivity.class));
+//		return true;
+//	}
 
 	private static class EfficientAdapter extends BaseAdapter {
 		private LayoutInflater mInflater;
@@ -209,13 +270,45 @@ public class MainActivity extends Activity {
 			holder.chk_hide.setOnClickListener(new OnClickListener() {
 
 				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					String id = ToDoArrayList.get(position).get(ITEM_id);
-					((MainActivity) v.getContext()).datasource.SetStatus(id);
-					
-				}
+				public void onClick(final View v) {
+					try
+					{
+						final AlertDialog Hide_dialog = new AlertDialog.Builder(v.getContext()).create();
+						Hide_dialog.setTitle("Confirm Hide");
+						Hide_dialog.setMessage("Are you sure you want to hide this item?");
+						
+						Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
+						
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								String id = ToDoArrayList.get(position).get(ITEM_id);
+								((MainActivity) v.getContext()).datasource.SetStatus(id);
+								ToDoArrayList.remove(position);
+								notifyDataSetChanged();
+							
+							}
+						});
+						
+						Hide_dialog.setButton2("No", new DialogInterface.OnClickListener() {
+							
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								Hide_dialog.cancel();
+							}
+						});
+						
+				    	Hide_dialog.show();
+						
+						
+					}
+			 	    catch(Exception ex)
+			 	    {
+			 		   Log.v("Logged error : ", "holder.txtHideRow.setOnClickListener() in NearByActivity, userid");
+			 	    }
+			}
 			});
+					
+				
 			//i++;
 			return convertView; 
 

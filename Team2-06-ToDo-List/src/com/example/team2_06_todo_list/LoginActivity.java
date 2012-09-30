@@ -42,21 +42,25 @@ public class LoginActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				if(!validate_Fields()){
-					return;
-				}
-				else
-				{
-					if(!(saved_user_id.equals(null))|| !(saved_user_id.equals(""))){
-						Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-						intent.putExtra("user_id", saved_user_id);
-						startActivity(intent); 
+				try{
+					if(!validate_Fields()){
+						return;
 					}
 					else
-						
-					showAlert(LoginActivity.this, "Invalid credentials!", "Either the username or password did not match.");
+					{
+						if(!(saved_user_id.equals(null))|| !(saved_user_id.equals(""))){
+							Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+							intent.putExtra("user_id", saved_user_id);
+							startActivity(intent); 
+						}
+					}
 				}
-				
+				catch(Exception e)
+				{
+
+				}
+
+
 			}
 		});
 
@@ -108,10 +112,12 @@ public class LoginActivity extends Activity {
 				if(str_user.equals(str_name) && str_pass.equals(str_password))
 				{
 					saved_user_id = UsersArrayList.get(i).get(USER_id);
+					return true;
 				}
 			}
+			showAlert(LoginActivity.this, "Invalid credentials!", "Either the username or password did not match.");
 		}
-		
+
 		return true;
 	}
 

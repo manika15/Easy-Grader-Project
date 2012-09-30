@@ -68,34 +68,7 @@ public class DataSource {
 		    return newUser;
 		  }
 	  
-	  
-//	  public Cursor createUser(String username, String pass, String email)
-//	  {
-//		  String query = "INSERT into user values ("+null +",'"+ username +"','"+ pass +"','"+ email + "')";
-//		  return database.rawQuery(query,null);
-//
-////		  try{
-////			  return database.rawQuery(query,null);
-////		  }
-////		  catch(Exception e)
-////		  {
-////			  String str = e.getMessage();
-////		  }
-////		return null;
-//	  }
-	  
-//	  public Cursor createItem(String item, String decription, String date, int referenceid) 
-//	  {
-//		  String query = "INSERT into user values ("+null +",'"+ item +"','"+ date +"','"+ decription +"' )";
-//		  try{
-//			  return database.rawQuery(query,null);
-//		  }
-//		  catch(Exception e)
-//		  {
-//			  String str = e.getMessage();
-//		  }
-//		return null;
-//	  }
+
 
 	  public void deleteItem(String id) {
 //	    long id = item.getId();
@@ -121,24 +94,18 @@ public class DataSource {
 		}
 	  
 	  public Cursor fetchAllUsers() {
-
-			//String query = "SELECT COLUMN_ID, COLUMN_ITEM, COLUMN_DUE_DATE, COLUMN_DESC FROM TABLE_ToDoList";
 			String query = "SELECT username, user_id FROM user";
 			return database.rawQuery(query,null);
 
 
 		}
 	  public Cursor SetStatus(String id) {
-
-			//String query = "SELECT COLUMN_ID, COLUMN_ITEM, COLUMN_DUE_DATE, COLUMN_DESC FROM TABLE_ToDoList";
-			String query = "UPDATE user SET status = 0 WHERE item_id = " + id;
+			String query = "UPDATE todo SET status = 0 WHERE item_id = " + id;
 			return database.rawQuery(query,null);
 
 		}
 	  
 	  public Cursor getUserInfo() {
-
-			//String query = "SELECT COLUMN_ID, COLUMN_ITEM, COLUMN_DUE_DATE, COLUMN_DESC FROM TABLE_ToDoList";
 			String query = "SELECT user_id, username, password FROM user";
 			return database.rawQuery(query,null);
 
