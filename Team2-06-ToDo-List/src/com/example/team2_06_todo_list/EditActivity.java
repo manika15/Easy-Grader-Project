@@ -119,7 +119,7 @@ public class EditActivity extends Activity {
 		String str_Desc = txt_desc.getText().toString();
 		String DueDate = DateFormat.format("MM dd yyyy", startDateFinalValue).toString();
 		String Priority = spinner_priority.getSelectedItem().toString();
-		datasource.createItem(str_Item, DueDate, str_Desc, Priority, user_id, "1");
+		datasource.UpdateItem(item_id, str_Item, DueDate, str_Desc, Priority);
 
 	}
 

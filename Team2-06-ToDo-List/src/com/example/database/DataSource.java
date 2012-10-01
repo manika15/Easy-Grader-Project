@@ -69,6 +69,11 @@ public class DataSource {
 		  }
 	  
 
+	  public Cursor UpdateItem(String id, String item, String due_date, String description, String priority) {
+			String query = "UPDATE todo SET item = '" +item+ "', duedate ='" +due_date+ "', description='" +description+ "',priority='" +priority+ "' WHERE item_id = " + id;
+			return database.rawQuery(query,null);
+
+		}
 
 	  public void deleteItem(String id) {
 //	    long id = item.getId();

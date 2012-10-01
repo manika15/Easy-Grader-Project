@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AddEditActivity extends Activity {
 
@@ -75,13 +77,27 @@ public class AddEditActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				add_item();
-				Intent intent = new Intent(AddEditActivity.this, MainActivity.class);
-				intent.putExtra("user_id", user_id);
-				startActivity(intent);
+				try{
+					if(!validate_Fields()){
+						return;
+					}
+
+					add_item();
+					Intent intent = new Intent(AddEditActivity.this, MainActivity.class);
+					intent.putExtra("user_id", user_id);
+					startActivity(intent);
+
+
+				}
+				catch(Exception e)
+				{
+
+				}
+
+
 			}
 		});
-		
+
 		Button btn_cancel = (Button)findViewById(R.id.btn_cancel);
 		btn_cancel.setOnClickListener(new OnClickListener() {
 
@@ -148,20 +164,53 @@ public class AddEditActivity extends Activity {
 		switch (id)
 		{
 		case STARTDATE_DAILOG_ID:  // for start date picker
-		return new DatePickerDialog(this,  mDateSetListenerForStartDate,  cyear, cmonth, cday);
+			return new DatePickerDialog(this,  mDateSetListenerForStartDate,  cyear, cmonth, cday);
 
 		}
 		return null;
 	}
 
-//	@Override
-//	public boolean onKeyDown(int keyCode, KeyEvent event)  {
-//
-//		if (keyCode == KeyEvent.KEYCODE_BACK)  //Override Keyback to do nothing in this case.
-//		{
-//			//add_item();
-//			//return true;
-//		}
-//		return super.onKeyDown(keyCode, event);  //-->All others key will work as usual
-//	}
+	private Boolean validate_Fields ()
+	{
+		EditText txt_userName = (EditText)findViewById(R.id.EditText_task);
+		EditText txt_pass = (EditText)findViewById(R.id.EditText_Password);
+
+		String str_user = txt_userName.getText().toString();
+		String str_pass = txt_pass.getText().toString();
+
+		if(str_user.equals(""))
+		{
+			showMessageToast(AddEditActivity.this, "Please enter task.!");
+			return false;
+		}
+
+
+		return true;
+	}
+
+
+	public void showMessageToast(Activity activityId,String message) {
+		try
+		{
+			Toast tst = Toast.makeText(activityId, message, Toast.LENGTH_LONG);
+			tst.setGravity(Gravity.CENTER, tst.getXOffset() / 2, tst.getYOffset() / 2);
+			tst.show();
+		}
+		catch(Exception ex)
+		{
+			Log.v("Logged error : ", "showMessageToast() in MeetingWaveMainClass, userid");
+
+		}
+	}
+
+	//	@Override
+	//	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+	//
+	//		if (keyCode == KeyEvent.KEYCODE_BACK)  //Override Keyback to do nothing in this case.
+	//		{
+	//			//add_item();
+	//			//return true;
+	//		}
+	//		return super.onKeyDown(keyCode, event);  //-->All others key will work as usual
+	//	}
 }
