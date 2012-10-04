@@ -238,4 +238,14 @@ public class EditActivity extends Activity {
 		}
 		
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (datasource != null) {
+			datasource.close();
+		}
+	
+	}
+	
 }

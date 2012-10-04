@@ -29,7 +29,7 @@
             android:label="@string/title_activity_Signup" >            
         </activity>
          <activity
-            android:name=".AddEditActivity"
+            android:name=".AddActivity"
             android:label="Add items" >            
         </activity>
         <activity

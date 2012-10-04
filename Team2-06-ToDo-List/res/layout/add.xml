@@ -46,11 +46,11 @@
             </TextView>
 
             <EditText
-                android:id="@+id/EditText_task"
+                android:id="@+id/EditText_add_task"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:hint="@string/add_item_name"
+                android:hint="@string/login_page_txt_usrname_hint"
                 android:inputType="textPersonName"
                 android:maxLines="1" >
             </EditText>
@@ -64,7 +64,7 @@
             </TextView>
 
             <Spinner
-                android:id="@+id/spinnerPriority"
+                android:id="@+id/spinner_add_Priority"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/priority" />
@@ -89,7 +89,7 @@
                 
                 <ImageButton
                  android:gravity="center"
-                 android:id="@+id/ImageButton_DueDate"
+                 android:id="@+id/ImageButton_add_DueDate"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:src="@drawable/calendar"
@@ -103,7 +103,7 @@
                     android:gravity="center"
                     android:text="start date"
                     android:textColor="@android:color/black"
-                    android:id="@+id/TextView_StartDate">
+                    android:id="@+id/TextView_add_StartDate">
                 </TextView>
              </LinearLayout>
 
@@ -116,7 +116,7 @@
             </TextView>
 
             <EditText
-                android:id="@+id/editNote"
+                android:id="@+id/edittext_add_desc"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
@@ -132,7 +132,7 @@
  		android:layout_alignParentBottom="true" >
         
          <Button 
-                   android:id="@+id/btn_save"
+                   android:id="@+id/btn_add_save"
                   android:text="@string/btn_save"
                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
               </Button>
 
               <Button 
-                   android:id="@+id/btn_cancel"
+                   android:id="@+id/btn_add_cancel"
                   android:text="@string/btn_cancel"
                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"

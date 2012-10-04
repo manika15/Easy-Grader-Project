@@ -27,7 +27,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AddEditActivity extends Activity {
+public class AddActivity extends Activity {
 
 	private DataSource datasource;
 
@@ -40,7 +40,7 @@ public class AddEditActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.add_edit);
+		setContentView(R.layout.add);
 
 		datasource = new DataSource(this);
 		datasource.open();
@@ -52,7 +52,7 @@ public class AddEditActivity extends Activity {
 		// Get data via the key
 		user_id = extras.getString("user_id");
 
-		ImageButton pickStartDate = (ImageButton) findViewById(R.id.ImageButton_DueDate);
+		ImageButton pickStartDate = (ImageButton) findViewById(R.id.ImageButton_add_DueDate);
 		pickStartDate.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				showDialog(STARTDATE_DAILOG_ID);
@@ -62,7 +62,7 @@ public class AddEditActivity extends Activity {
 
 
 		//set the start date to the current date
-		final TextView startDateLabel = (TextView) findViewById(R.id.TextView_StartDate);
+		final TextView startDateLabel = (TextView) findViewById(R.id.TextView_add_StartDate);
 		startDateValue.setToNow();
 		startDateFinalValue = startDateValue.toMillis(true);
 		startDateLabel.setText(DateFormat.format("MMMM dd, yyyy", startDateFinalValue));
@@ -71,7 +71,7 @@ public class AddEditActivity extends Activity {
 		//        final TextView startTimeLabel = (TextView) findViewById(R.id.TextView_CreateInvite_StartTime_Label);
 		//        startTimeLabel.setText("(pick start time)");
 
-		Button btn_save = (Button)findViewById(R.id.btn_save);
+		Button btn_save = (Button)findViewById(R.id.btn_add_save);
 		btn_save.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -83,7 +83,7 @@ public class AddEditActivity extends Activity {
 					}
 
 					add_item();
-					Intent intent = new Intent(AddEditActivity.this, MainActivity.class);
+					Intent intent = new Intent(AddActivity.this, MainActivity.class);
 					intent.putExtra("user_id", user_id);
 					startActivity(intent);
 
@@ -98,7 +98,7 @@ public class AddEditActivity extends Activity {
 			}
 		});
 
-		Button btn_cancel = (Button)findViewById(R.id.btn_cancel);
+		Button btn_cancel = (Button)findViewById(R.id.btn_add_cancel);
 		btn_cancel.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -111,24 +111,46 @@ public class AddEditActivity extends Activity {
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (datasource != null) {
+			datasource.close();
+		}
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
-		menu.findItem(R.id.menu_item_new).setIntent(new Intent(AddEditActivity.this, AddEditActivity.class));
-		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(AddEditActivity.this, HiddenItemsActivity.class));
+		menu.findItem(R.id.menu_item_new).setIntent(new Intent(AddActivity.this, AddActivity.class));
+		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(AddActivity.this, HiddenItemsActivity.class));
 		return true;
 	}
 
 	private void add_item()
 	{
-		EditText txt_item = (EditText)findViewById(R.id.EditText_task);
-		EditText txt_desc = (EditText)findViewById(R.id.editNote);
-		Spinner spinner_priority = (Spinner)findViewById(R.id.spinnerPriority);
+		EditText txt_item = (EditText)findViewById(R.id.EditText_add_task);
+		EditText txt_desc = (EditText)findViewById(R.id.edittext_add_desc);
+		Spinner spinner_priority = (Spinner)findViewById(R.id.spinner_add_Priority);
 
 		String str_Item = txt_item.getText().toString();
 		String str_Desc = txt_desc.getText().toString();
-		String DueDate = DateFormat.format("MM dd yyyy", startDateFinalValue).toString();
+		String DueDate = DateFormat.format("MM-dd-yyyy", startDateFinalValue).toString();
 		String Priority = spinner_priority.getSelectedItem().toString();
-		datasource.createItem(str_Item, DueDate, str_Desc, Priority, user_id, "1");
+		String str_priority = null;
+		if(Priority.equals("High"))
+		{
+			str_priority = "1";
+		}
+		if(Priority.equals("Medium"))
+		{
+			str_priority = "2";
+		}
+		else if(Priority.equals("Low"))
+		{
+			str_priority = "3";
+		}	
+		
+		datasource.createItem(str_Item, DueDate, str_Desc, str_priority, user_id, "1");
 
 	}
 
@@ -139,7 +161,7 @@ public class AddEditActivity extends Activity {
 		{
 			try
 			{
-				final TextView startDateLabel = (TextView) findViewById(R.id.TextView_StartDate);
+				final TextView startDateLabel = (TextView) findViewById(R.id.TextView_add_StartDate);
 
 				startDateValue.set(dayOfMonth, monthOfYear, year);
 				startDateFinalValue = startDateValue.toMillis(true);
@@ -172,17 +194,16 @@ public class AddEditActivity extends Activity {
 
 	private Boolean validate_Fields ()
 	{
-		EditText txt_userName = (EditText)findViewById(R.id.EditText_task);
-		EditText txt_pass = (EditText)findViewById(R.id.EditText_Password);
+		EditText txt_task = (EditText)findViewById(R.id.EditText_add_task);
 
-		String str_user = txt_userName.getText().toString();
-		String str_pass = txt_pass.getText().toString();
+		String str_user = txt_task.getText().toString();
 
 		if(str_user.equals(""))
 		{
-			showMessageToast(AddEditActivity.this, "Please enter task.!");
+			showMessageToast(AddActivity.this, "Please enter task.!");
 			return false;
 		}
+		
 
 
 		return true;

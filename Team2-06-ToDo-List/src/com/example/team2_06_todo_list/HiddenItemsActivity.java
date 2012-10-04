@@ -69,7 +69,7 @@ public class HiddenItemsActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
-		menu.findItem(R.id.menu_item_new).setIntent(new Intent(HiddenItemsActivity.this, AddEditActivity.class));
+		menu.findItem(R.id.menu_item_new).setIntent(new Intent(HiddenItemsActivity.this, AddActivity.class));
 		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(HiddenItemsActivity.this, HiddenItemsActivity.class));
         return true;
     }
@@ -102,7 +102,7 @@ public class HiddenItemsActivity extends Activity {
 				
 				holder.txtTodoItem = (TextView) convertView.findViewById(R.id.txt_list_todo);
 				holder.txtDueDate = (TextView) convertView.findViewById(R.id.txt_list_due_date);
-				holder.txtDuePriority = (TextView) convertView.findViewById(R.id.txt_list_due_prioroty);
+				holder.txtDuePriority = (TextView) convertView.findViewById(R.id.txt_list_priority);
 				
 				convertView.setTag(holder);
 			} else {

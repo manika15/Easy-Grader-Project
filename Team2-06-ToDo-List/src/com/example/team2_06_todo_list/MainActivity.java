@@ -1,6 +1,8 @@
 package com.example.team2_06_todo_list;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -14,7 +16,6 @@ import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +25,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -102,57 +104,43 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent intent = new Intent(MainActivity.this, AddEditActivity.class);
+				Intent intent = new Intent(MainActivity.this, AddActivity.class);
 				intent.putExtra("user_id", user_id);
 				startActivity(intent);
 			}
 		});
-		
+
 		Button btn_logout = (Button)findViewById(R.id.btn_main_logout);
 		btn_logout.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				final AlertDialog Hide_dialog = new AlertDialog.Builder(v.getContext()).create();
 				Hide_dialog.setTitle("Confirm Hide");
 				Hide_dialog.setMessage("Are you sure you want to logout?");
-				
+
 				Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
-				
+
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 						moveTaskToBack(true);
 					}
 				});
-				
+
 				Hide_dialog.setButton2("No", new DialogInterface.OnClickListener() {
-					
+
 					public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 						Hide_dialog.cancel();
 					}
 				});
-				
-		    	Hide_dialog.show();
-				
+
+				Hide_dialog.show();
+
 			}
 		});
 	}
-
-	//	@Override
-	//	protected void onPause() {
-	//		// TODO Auto-generated method stub
-	//		datasource.close();
-	//		super.onPause();
-	//	}
-	//
-	//	@Override
-	//	protected void onResume() {
-	//		// TODO Auto-generated method stub
-	//		datasource.open();
-	//		super.onResume();
-	//	}
 
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
@@ -160,31 +148,35 @@ public class MainActivity extends Activity {
 		case SetSortDate:
 			break;
 		case SetPrioritySort:
+			fillDataByPriority();
+			ListView lst_todo = (ListView)findViewById(R.id.main_listView);
+			EfficientAdapter adapter = new EfficientAdapter(this);
+			lst_todo.setAdapter(adapter);
 			break;
 		case Delete:
 			final AlertDialog Hide_dialog = new AlertDialog.Builder(this).create();
 			Hide_dialog.setTitle("Confirm Hide");
 			Hide_dialog.setMessage("Are you sure you want to delete");
-			
+
 			Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
-			
+
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					delete_items();
 				}
 			});
-			
+
 			Hide_dialog.setButton2("No", new DialogInterface.OnClickListener() {
-				
+
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					Hide_dialog.cancel();
 				}
 			});
-			
-	    	Hide_dialog.show();
-			
-			
+
+			Hide_dialog.show();
+
+
 			break;
 		case Edit:
 			Intent intent = new Intent(MainActivity.this, EditActivity.class);
@@ -196,14 +188,14 @@ public class MainActivity extends Activity {
 		}
 		return super.onContextItemSelected(item);
 	}
-	
+
 	private void delete_items()
 	{
 		datasource.deleteItem(str_id);
-			ListView lst_todo = (ListView)findViewById(R.id.main_listView);
-			fillData();
-			EfficientAdapter adapter = new EfficientAdapter(this);
-			lst_todo.setAdapter(adapter);
+		ListView lst_todo = (ListView)findViewById(R.id.main_listView);
+		fillData();
+		EfficientAdapter adapter = new EfficientAdapter(this);
+		lst_todo.setAdapter(adapter);
 	}
 
 	@Override
@@ -216,13 +208,13 @@ public class MainActivity extends Activity {
 		menu.add(0, Edit, 3, "Edit");
 	}
 
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//		getMenuInflater().inflate(R.menu.activity_main, menu);
-//		menu.findItem(R.id.menu_item_new).setIntent(new Intent(MainActivity.this, AddEditActivity.class));
-//		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(MainActivity.this, HiddenItemsActivity.class));
-//		return true;
-//	}
+	//	@Override
+	//	public boolean onCreateOptionsMenu(Menu menu) {
+	//		getMenuInflater().inflate(R.menu.activity_main, menu);
+	//		menu.findItem(R.id.menu_item_new).setIntent(new Intent(MainActivity.this, AddEditActivity.class));
+	//		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(MainActivity.this, HiddenItemsActivity.class));
+	//		return true;
+	//	}
 
 	private static class EfficientAdapter extends BaseAdapter {
 		private LayoutInflater mInflater;
@@ -253,19 +245,40 @@ public class MainActivity extends Activity {
 				holder.txtTodoItem = (TextView) convertView.findViewById(R.id.txt_list_todo);
 				holder.txtDueDate = (TextView) convertView.findViewById(R.id.txt_list_due_date);
 				holder.chk_hide = (CheckBox) convertView.findViewById(R.id.lst_chk_box);
+				//holder.txtPriority = (TextView) convertView.findViewById(R.id.txt_list_priority);
+				holder.imgPriority = (ImageView) convertView.findViewById(R.id.txt_list_priority);
 
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			if(ToDoArrayList.get(position).get(STATUS).equals("1"))
+			holder.txtTodoItem.setText(ToDoArrayList.get(position).get(ITEM));
+			holder.txtDueDate.setText(ToDoArrayList.get(position).get(DUE_DATE));
+			//holder.txtPriority.setText(ToDoArrayList.get(position).get(PRIOITY));
+			String str_priority = ToDoArrayList.get(position).get(PRIOITY);
+			
+			if(str_priority.equals("1"))
 			{
-				String str = ToDoArrayList.get(position).get(ITEM);
-				holder.txtTodoItem.setText(str);
-				String ster_date = ToDoArrayList.get(position).get(DUE_DATE);
-				holder.txtDueDate.setText(ster_date);
+				holder.imgPriority.setImageResource(R.drawable.red);
 			}
+			else if(str_priority.equals("2"))
+			{
+				holder.imgPriority.setImageResource(R.drawable.blue);
+			}
+			else if(str_priority.equals("3"))
+			{
+				holder.imgPriority.setImageResource(R.drawable.yellow);
+			}
+
+
+			//			if(ToDoArrayList.get(position).get(STATUS).equals("1"))
+			//			{
+			//				String str = ToDoArrayList.get(position).get(ITEM);
+			//				holder.txtTodoItem.setText(str);
+			//				String ster_date = ToDoArrayList.get(position).get(DUE_DATE);
+			//				holder.txtDueDate.setText(ster_date);
+			//			}
 
 			holder.chk_hide.setOnClickListener(new OnClickListener() {
 
@@ -276,39 +289,39 @@ public class MainActivity extends Activity {
 						final AlertDialog Hide_dialog = new AlertDialog.Builder(v.getContext()).create();
 						Hide_dialog.setTitle("Confirm Hide");
 						Hide_dialog.setMessage("Are you sure you want to hide this item?");
-						
+
 						Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
-						
+
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 								String id = ToDoArrayList.get(position).get(ITEM_id);
 								((MainActivity) v.getContext()).datasource.SetStatus(id);
 								ToDoArrayList.remove(position);
 								notifyDataSetChanged();
-							
+
 							}
 						});
-						
+
 						Hide_dialog.setButton2("No", new DialogInterface.OnClickListener() {
-							
+
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 								Hide_dialog.cancel();
 							}
 						});
-						
-				    	Hide_dialog.show();
-						
-						
+
+						Hide_dialog.show();
+
+
 					}
-			 	    catch(Exception ex)
-			 	    {
-			 		   Log.v("Logged error : ", "holder.txtHideRow.setOnClickListener() in NearByActivity, userid");
-			 	    }
-			}
+					catch(Exception ex)
+					{
+						Log.v("Logged error : ", "holder.txtHideRow.setOnClickListener() in NearByActivity, userid");
+					}
+				}
 			});
-					
-				
+
+
 			//i++;
 			return convertView; 
 
@@ -319,6 +332,8 @@ public class MainActivity extends Activity {
 			TextView txtTodoItem;
 			TextView txtDueDate;
 			CheckBox chk_hide;
+			TextView txtPriority;
+			ImageView imgPriority;
 		}
 	}
 
@@ -376,4 +391,63 @@ public class MainActivity extends Activity {
 
 	}
 
+	private void fillDataByPriority() {
+
+		try
+		{
+			ToDoArrayList = new ArrayList<HashMap<String,String>>();
+			DataSource mDbadapter = new DataSource(this);
+			mDbadapter.open(); 
+			Cursor data_cur = mDbadapter.fetchAllItemsSortedByPriority(user_id);
+			if(data_cur.getCount() >0)
+			{ 
+				if(data_cur.moveToFirst()) 
+				{ 
+					do   
+					{
+						HashMap<String,String> map = new HashMap<String, String>(); 
+
+						String item_id = data_cur.getString(0);
+						String item = data_cur.getString(1);
+						String due_date = data_cur.getString(2);     
+						String description = data_cur.getString(3);
+						String priority = data_cur.getString(4);
+						String status = data_cur.getString(5);
+
+						map.put(ITEM_id, item_id);
+						map.put(ITEM, item);
+						map.put(DUE_DATE, due_date);
+						map.put(DESCRIPTION, description);
+						map.put(PRIOITY, priority);
+						map.put(STATUS, status);
+						ToDoArrayList.add(map);
+
+					}while (data_cur.moveToNext());
+
+				}
+			}
+
+			else Toast.makeText(this, 
+					"No Records", 
+					Toast.LENGTH_SHORT).show();       
+
+
+			data_cur.close();   
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			String str = e.getMessage();
+			String sss = str;
+		}
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (datasource != null) {
+			datasource.close();
+		}
+
+	}
 }
