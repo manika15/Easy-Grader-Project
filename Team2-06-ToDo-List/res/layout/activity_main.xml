@@ -35,7 +35,7 @@
         android:text="@string/main_txt_Priority" 
         android:textColor="@android:color/white"
         android:layout_alignParentRight="true"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="40dp"
         android:layout_marginRight="10dp"
         android:textStyle="bold"/>
      </RelativeLayout>
@@ -46,11 +46,14 @@
         android:layout_height="wrap_content"
         android:background="#eeeee0"
         android:drawSelectorOnTop="false" 
-        android:layout_below="@+id/main_rel_layout">
+        android:layout_below="@+id/main_rel_layout"
+        android:layout_above="@+id/relativelayout_bottom">
 
             </ListView>
             
-    <RelativeLayout android:layout_width="fill_parent"
+    <RelativeLayout 
+        android:id="@+id/relativelayout_bottom"
+        android:layout_width="fill_parent"
     android:layout_height="wrap_content" 
     android:layout_alignParentBottom="true"
     android:background="@color/green_background"

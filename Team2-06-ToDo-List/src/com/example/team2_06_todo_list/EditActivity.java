@@ -43,7 +43,7 @@ public class EditActivity extends Activity {
 	static final String ITEM = "item";
 	static final String DUE_DATE = "due_date";     
 	static final String DESCRIPTION = "description";
-	static final	String PRIOITY = "priority";
+	static final String PRIOITY = "priority";
 	static final String STATUS = "status";
 	static final String REFRENCE_ID = "reference_id";
 	
@@ -101,13 +101,13 @@ public class EditActivity extends Activity {
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		menu.findItem(R.id.menu_item_new).setIntent(new Intent(EditActivity.this, EditActivity.class));
-		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(EditActivity.this, HiddenItemsActivity.class));
-		return true;
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		getMenuInflater().inflate(R.menu.activity_main, menu);
+//		menu.findItem(R.id.menu_item_new).setIntent(new Intent(EditActivity.this, EditActivity.class));
+//		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(EditActivity.this, HiddenItemsActivity.class));
+//		return true;
+//	}
 
 	private void add_item()
 	{

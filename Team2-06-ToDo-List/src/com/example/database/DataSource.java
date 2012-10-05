@@ -103,10 +103,10 @@ public class DataSource {
 	//		}
 
 	public Cursor fetchAllItems(String id) {
-		String query = "SELECT item_id, item, duedate, description, priority, status FROM todo where reference_id = " + id;
+		String query = "SELECT item_id, item, duedate, description, priority, status FROM todo where reference_id = " + id + " order by duedate asc";
 		return database.rawQuery(query,null);
 	}
-	
+
 	public Cursor fetchAllItemsSortedByPriority(String id) {
 		String query = "SELECT * FROM todo where reference_id = " + id + " order by priority asc";
 		return database.rawQuery(query,null);

@@ -5,9 +5,11 @@ import java.util.Calendar;
 import com.example.database.DataSource;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -34,7 +36,9 @@ public class AddActivity extends Activity {
 	// int fields to open coresponding dialog boxes for the dat and time fields
 	static final int STARTDATE_DAILOG_ID = 0;
 	Time startDateValue = new Time();
+	Time CurrentDateValue = new Time();
 	long startDateFinalValue=0;
+
 	String user_id;
 
 	@Override
@@ -63,6 +67,7 @@ public class AddActivity extends Activity {
 
 		//set the start date to the current date
 		final TextView startDateLabel = (TextView) findViewById(R.id.TextView_add_StartDate);
+		CurrentDateValue.setToNow();
 		startDateValue.setToNow();
 		startDateFinalValue = startDateValue.toMillis(true);
 		startDateLabel.setText(DateFormat.format("MMMM dd, yyyy", startDateFinalValue));
@@ -117,14 +122,14 @@ public class AddActivity extends Activity {
 			datasource.close();
 		}
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		menu.findItem(R.id.menu_item_new).setIntent(new Intent(AddActivity.this, AddActivity.class));
-		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(AddActivity.this, HiddenItemsActivity.class));
-		return true;
-	}
+//
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		getMenuInflater().inflate(R.menu.activity_main, menu);
+//		menu.findItem(R.id.menu_item_new).setIntent(new Intent(AddActivity.this, AddActivity.class));
+//		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(AddActivity.this, HiddenItemsActivity.class));
+//		return true;
+//	}
 
 	private void add_item()
 	{
@@ -149,7 +154,7 @@ public class AddActivity extends Activity {
 		{
 			str_priority = "3";
 		}	
-		
+
 		datasource.createItem(str_Item, DueDate, str_Desc, str_priority, user_id, "1");
 
 	}
@@ -203,8 +208,13 @@ public class AddActivity extends Activity {
 			showMessageToast(AddActivity.this, "Please enter task.!");
 			return false;
 		}
-		
 
+		int dateComparisonResult = Time.compare(startDateValue,CurrentDateValue);
+		if(dateComparisonResult < 0) // date fields validation
+		{
+			showMessageToast(AddActivity.this,"You can not enter past date!");
+			return false;
+		}
 
 		return true;
 	}
@@ -224,14 +234,33 @@ public class AddActivity extends Activity {
 		}
 	}
 
-	//	@Override
-	//	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+	//		@Override
+	//		public boolean onKeyDown(int keyCode, KeyEvent event)  {
+	//	
+	//			if (keyCode == KeyEvent.KEYCODE_BACK)  //Override Keyback to do nothing in this case.
+	//			{
+	//				final AlertDialog Hide_dialog = new AlertDialog.Builder(AddActivity.this).create();
+	//				Hide_dialog.setTitle("Confirm");
+	//				Hide_dialog.setMessage("You have not saved this entry. Are you sure you want to navigate back?");
 	//
-	//		if (keyCode == KeyEvent.KEYCODE_BACK)  //Override Keyback to do nothing in this case.
-	//		{
-	//			//add_item();
-	//			//return true;
+	//				Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
+	//
+	//					public void onClick(DialogInterface dialog, int which) {
+	//						// TODO Auto-generated method stub
+	//						//moveTaskToBack(true);
+	//					}
+	//				});
+	//
+	//				Hide_dialog.setButton2("No", new DialogInterface.OnClickListener() {
+	//
+	//					public void onClick(DialogInterface dialog, int which) {
+	//						// TODO Auto-generated method stub
+	//						Hide_dialog.cancel();
+	//					}
+	//				});
+	//
+	//				Hide_dialog.show();
+	//			}
+	//			return super.onKeyDown(keyCode, event);  //-->All others key will work as usual
 	//		}
-	//		return super.onKeyDown(keyCode, event);  //-->All others key will work as usual
-	//	}
 }

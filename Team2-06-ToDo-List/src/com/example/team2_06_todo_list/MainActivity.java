@@ -1,8 +1,6 @@
 package com.example.team2_06_todo_list;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 
 import android.app.Activity;
@@ -15,7 +13,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -52,6 +52,7 @@ public class MainActivity extends Activity {
 	public static final int SetPrioritySort = 1;
 	public static final int Delete = 2;
 	public static final int Edit = 3;
+//	public static final int Details = 4;
 
 	private String user_id= null;
 	String str_id;
@@ -116,27 +117,7 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				final AlertDialog Hide_dialog = new AlertDialog.Builder(v.getContext()).create();
-				Hide_dialog.setTitle("Confirm Hide");
-				Hide_dialog.setMessage("Are you sure you want to logout?");
-
-				Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						moveTaskToBack(true);
-					}
-				});
-
-				Hide_dialog.setButton2("No", new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						Hide_dialog.cancel();
-					}
-				});
-
-				Hide_dialog.show();
+				logout();
 
 			}
 		});
@@ -184,6 +165,13 @@ public class MainActivity extends Activity {
 			intent.putExtra("item_id", str_id);
 			startActivity(intent);
 			break;
+//		case Details:
+//			Intent intent_details = new Intent(MainActivity.this, DetailsActivity.class);
+//			intent_details.putExtra("user_id", user_id);
+//			intent_details.putExtra("item_id", str_id);
+//			startActivity(intent_details);
+//			break;
+
 
 		}
 		return super.onContextItemSelected(item);
@@ -206,15 +194,18 @@ public class MainActivity extends Activity {
 		menu.add(0, SetPrioritySort, 1, "Sort list by priority");
 		menu.add(0, Delete, 2, "Delete");
 		menu.add(0, Edit, 3, "Edit");
+//		menu.add(0, Details, 3, "Details");
 	}
 
-	//	@Override
-	//	public boolean onCreateOptionsMenu(Menu menu) {
-	//		getMenuInflater().inflate(R.menu.activity_main, menu);
-	//		menu.findItem(R.id.menu_item_new).setIntent(new Intent(MainActivity.this, AddEditActivity.class));
-	//		menu.findItem(R.id.menu_item_Hidden).setIntent(new Intent(MainActivity.this, HiddenItemsActivity.class));
-	//		return true;
-	//	}
+		@Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+			getMenuInflater().inflate(R.menu.activity_main, menu);
+			Intent intent = new Intent(MainActivity.this, HiddenItemsActivity.class);
+			intent.putExtra("user_id", user_id);
+			intent.putExtra("item_id", str_id);
+			menu.findItem(R.id.menu_item_Hidden).setIntent(intent);
+			return true;
+		}
 
 	private static class EfficientAdapter extends BaseAdapter {
 		private LayoutInflater mInflater;
@@ -237,7 +228,7 @@ public class MainActivity extends Activity {
 		}
 
 		public View getView(final int position, View convertView, ViewGroup parent) {
-			ViewHolder holder;
+			final ViewHolder holder;
 			if (convertView == null) {
 				convertView = mInflater.inflate(R.layout.row_listview, null);
 				holder = new ViewHolder();
@@ -253,32 +244,33 @@ public class MainActivity extends Activity {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			holder.txtTodoItem.setText(ToDoArrayList.get(position).get(ITEM));
-			holder.txtDueDate.setText(ToDoArrayList.get(position).get(DUE_DATE));
-			//holder.txtPriority.setText(ToDoArrayList.get(position).get(PRIOITY));
-			String str_priority = ToDoArrayList.get(position).get(PRIOITY);
-			
-			if(str_priority.equals("1"))
-			{
-				holder.imgPriority.setImageResource(R.drawable.red);
-			}
-			else if(str_priority.equals("2"))
-			{
-				holder.imgPriority.setImageResource(R.drawable.blue);
-			}
-			else if(str_priority.equals("3"))
-			{
-				holder.imgPriority.setImageResource(R.drawable.yellow);
-			}
 
 
-			//			if(ToDoArrayList.get(position).get(STATUS).equals("1"))
-			//			{
-			//				String str = ToDoArrayList.get(position).get(ITEM);
-			//				holder.txtTodoItem.setText(str);
-			//				String ster_date = ToDoArrayList.get(position).get(DUE_DATE);
-			//				holder.txtDueDate.setText(ster_date);
-			//			}
+			if(ToDoArrayList.get(position).get(STATUS).equals("1"))
+			{
+				String str_Item = ToDoArrayList.get(position).get(ITEM);
+				if(str_Item.length() > 15)
+				{
+					str_Item = str_Item.substring(0,15) + "...";
+				}
+				holder.txtTodoItem.setText(str_Item);
+				holder.txtDueDate.setText(ToDoArrayList.get(position).get(DUE_DATE));
+				//holder.txtPriority.setText(ToDoArrayList.get(position).get(PRIOITY));
+				String str_priority = ToDoArrayList.get(position).get(PRIOITY);
+
+				if(str_priority.equals("1"))
+				{
+					holder.imgPriority.setImageResource(R.drawable.red);
+				}
+				else if(str_priority.equals("2"))
+				{
+					holder.imgPriority.setImageResource(R.drawable.blue);
+				}
+				else if(str_priority.equals("3"))
+				{
+					holder.imgPriority.setImageResource(R.drawable.yellow);
+				}
+			}
 
 			holder.chk_hide.setOnClickListener(new OnClickListener() {
 
@@ -306,6 +298,7 @@ public class MainActivity extends Activity {
 
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
+								holder.chk_hide.setChecked(false);
 								Hide_dialog.cancel();
 							}
 						});
@@ -436,10 +429,43 @@ public class MainActivity extends Activity {
 		}
 		catch (Exception e) {
 			// TODO: handle exception
-			String str = e.getMessage();
-			String sss = str;
 		}
 
+	}
+
+	private void logout()
+	{
+		final AlertDialog Hide_dialog = new AlertDialog.Builder(MainActivity.this).create();
+		Hide_dialog.setTitle("Confirm Hide");
+		Hide_dialog.setMessage("Are you sure you want to logout?");
+
+		Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				moveTaskToBack(true);
+			}
+		});
+
+		Hide_dialog.setButton2("No", new DialogInterface.OnClickListener() {
+
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				Hide_dialog.cancel();
+			}
+		});
+
+		Hide_dialog.show();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)  {
+
+		if (keyCode == KeyEvent.KEYCODE_BACK)  //Override Keyback to do nothing in this case.
+		{
+			logout();
+		}
+		return super.onKeyDown(keyCode, event);  //-->All others key will work as usual
 	}
 
 	@Override
@@ -450,4 +476,13 @@ public class MainActivity extends Activity {
 		}
 
 	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		ListView lst = (ListView)findViewById(R.id.main_listView);
+	}
+
+
 }

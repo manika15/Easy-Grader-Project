@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:paddingTop="10dp"
-        android:text="Details"
+        android:text="@string/signup_heading"
         android:textStyle="bold" >
     </TextView>
 
@@ -22,7 +22,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="55dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
@@ -46,14 +46,13 @@
             </TextView>
 
             <EditText
-                android:id="@+id/EditText_item_name"
+                android:id="@+id/EditText_details_task"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
+                android:hint="@string/login_page_txt_usrname_hint"
                 android:inputType="textPersonName"
-                android:maxLines="1" 
-                android:focusable="false"
-                android:text="Meet the professor">
+                android:maxLines="1" >
             </EditText>
 
             <TextView
@@ -65,11 +64,10 @@
             </TextView>
 
             <Spinner
-                android:id="@+id/spinnerPriority"
+                android:id="@+id/spinner_details_Priority"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:entries="@array/priority" 
-                android:focusable="false"/>
+                android:entries="@array/priority" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,11 +77,35 @@
                 android:textColor="@android:color/black" >
             </TextView>
 
-            <DatePicker
+         <!--     <DatePicker
                 android:id="@+id/datePicker1"
                 android:layout_width="fill_parent"
+                android:layout_height="wrap_content" /> -->
+                
+                 <LinearLayout
+                android:orientation="horizontal"
                 android:layout_height="wrap_content"
-                android:focusable="false" />
+                android:layout_width="fill_parent">
+                
+                <ImageButton
+                 android:gravity="center"
+                 android:id="@+id/ImageButton_details_DueDate"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/calendar"
+                 android:background="@null"
+                 android:padding="3dip" >
+                </ImageButton>
+                
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:gravity="center"
+                    android:text="start date"
+                    android:textColor="@android:color/black"
+                    android:id="@+id/TextView_details_StartDate">
+                </TextView>
+             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -94,25 +116,24 @@
             </TextView>
 
             <EditText
-                android:id="@+id/editNote"
+                android:id="@+id/edit_details_Note"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:inputType="textMultiLine"
-                android:maxLines="1" 
-                android:focusable="false">
+                android:maxLines="1" >
             </EditText>
         </LinearLayout>
     </ScrollView>
 
-   <!--  <RelativeLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
  		android:layout_alignParentBottom="true" >
         
          <Button 
-                   android:id="@+id/btn_save"
-                  android:text="@string/btn_save"
+                   android:id="@+id/btn_details_edit"
+                  android:text="@string/btn_edit"
                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                     android:textColor="@android:color/white"
@@ -123,7 +144,7 @@
               </Button>
 
               <Button 
-                   android:id="@+id/btn_cancel"
+                   android:id="@+id/btn_details_cancel"
                   android:text="@string/btn_cancel"
                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
@@ -135,7 +156,7 @@
                     android:background="@drawable/btn_bg">
               </Button>
 	
-    </RelativeLayout>  -->
+    </RelativeLayout> 
 </RelativeLayout>
    
 
