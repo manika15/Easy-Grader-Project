@@ -34,12 +34,6 @@ import com.example.database.DataSource;
 
 public class MainActivity extends Activity {
 
-	//	static final String KEY_ToDoId = "id"; // parent node
-	//	static final String KEY_ToDo = "todo"; 
-	//	static final String KEY_PREFERENCE = "id";
-	//	static final String KEY_DATE = "title";
-	//	static final String KEY_STATUS = "artist";
-
 	static final String ITEM_id = "item_id";
 	static final String ITEM = "item";
 	static final String DUE_DATE = "due_date";     
@@ -52,6 +46,8 @@ public class MainActivity extends Activity {
 	public static final int SetPrioritySort = 1;
 	public static final int Delete = 2;
 	public static final int Edit = 3;
+	
+	private static String str_sortingFlag = "date";
 //	public static final int Details = 4;
 
 	private String user_id= null;
@@ -75,7 +71,10 @@ public class MainActivity extends Activity {
 		}
 		// Get data via the key
 		user_id = extras.getString("user_id");
-
+		if(!(extras.getString("str_sortingFlag")).equals(null));
+		{
+			str_sortingFlag = extras.getString("str_sortingFlag");
+		}
 
 		ListView lst_todo = (ListView)findViewById(R.id.main_listView);
 
@@ -87,12 +86,12 @@ public class MainActivity extends Activity {
 		lst_todo.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+			public void onItemClick(AdapterView<?> arg0, View v, int pos,
 					long arg3) {
 				// TODO Auto-generated method stub
 				str_id = ToDoArrayList.get(pos).get(ITEM_id);
-				registerForContextMenu(arg1); 
-				openContextMenu(arg1);
+				registerForContextMenu(v); 
+				openContextMenu(v);
 
 				//				Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
 				//				startActivity(intent);
@@ -107,6 +106,7 @@ public class MainActivity extends Activity {
 				// TODO Auto-generated method stub
 				Intent intent = new Intent(MainActivity.this, AddActivity.class);
 				intent.putExtra("user_id", user_id);
+				intent.putExtra("str_sortingFlag", str_sortingFlag);
 				startActivity(intent);
 			}
 		});
@@ -127,17 +127,23 @@ public class MainActivity extends Activity {
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case SetSortDate:
+			str_sortingFlag = "date";
+			fillData();
+			ListView lst_todo_date = (ListView)findViewById(R.id.main_listView);
+			EfficientAdapter adapter_date = new EfficientAdapter(this);
+			lst_todo_date.setAdapter(adapter_date);
 			break;
 		case SetPrioritySort:
-			fillDataByPriority();
+			str_sortingFlag = "priority";
+			fillData();
 			ListView lst_todo = (ListView)findViewById(R.id.main_listView);
 			EfficientAdapter adapter = new EfficientAdapter(this);
 			lst_todo.setAdapter(adapter);
 			break;
 		case Delete:
 			final AlertDialog Hide_dialog = new AlertDialog.Builder(this).create();
-			Hide_dialog.setTitle("Confirm Hide");
-			Hide_dialog.setMessage("Are you sure you want to delete");
+			Hide_dialog.setTitle("Confirm Delete");
+			Hide_dialog.setMessage("Are you sure you want to delete?");
 
 			Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
 
@@ -163,6 +169,7 @@ public class MainActivity extends Activity {
 			Intent intent = new Intent(MainActivity.this, EditActivity.class);
 			intent.putExtra("user_id", user_id);
 			intent.putExtra("item_id", str_id);
+			intent.putExtra("str_sortingFlag", str_sortingFlag);
 			startActivity(intent);
 			break;
 //		case Details:
@@ -179,6 +186,7 @@ public class MainActivity extends Activity {
 
 	private void delete_items()
 	{
+//		datasource.open();
 		datasource.deleteItem(str_id);
 		ListView lst_todo = (ListView)findViewById(R.id.main_listView);
 		fillData();
@@ -248,6 +256,7 @@ public class MainActivity extends Activity {
 
 			if(ToDoArrayList.get(position).get(STATUS).equals("1"))
 			{
+				holder.chk_hide.setChecked(false);
 				String str_Item = ToDoArrayList.get(position).get(ITEM);
 				if(str_Item.length() > 15)
 				{
@@ -287,8 +296,9 @@ public class MainActivity extends Activity {
 							public void onClick(DialogInterface dialog, int which) {
 								// TODO Auto-generated method stub
 								String id = ToDoArrayList.get(position).get(ITEM_id);
-								((MainActivity) v.getContext()).datasource.SetStatus(id);
-								ToDoArrayList.remove(position);
+								((MainActivity) v.getContext()).datasource.UpdateItem(id, null, null, null, null, "0");
+								((MainActivity) v.getContext()).fillData();
+								//ToDoArrayList.remove(position);
 								notifyDataSetChanged();
 
 							}
@@ -325,7 +335,6 @@ public class MainActivity extends Activity {
 			TextView txtTodoItem;
 			TextView txtDueDate;
 			CheckBox chk_hide;
-			TextView txtPriority;
 			ImageView imgPriority;
 		}
 	}
@@ -337,7 +346,17 @@ public class MainActivity extends Activity {
 			ToDoArrayList = new ArrayList<HashMap<String,String>>();
 			DataSource mDbadapter = new DataSource(this);
 			mDbadapter.open(); 
-			Cursor data_cur = mDbadapter.fetchAllItems(user_id);
+			Cursor data_cur = null;
+			if(str_sortingFlag.equals("date"))
+			{
+				data_cur = mDbadapter.fetchAllItems(user_id);
+			}
+			else if(str_sortingFlag.equals("priority"))
+			{
+				data_cur = mDbadapter.fetchAllItemsSortedByPriority(user_id);
+			}
+
+			//Cursor data_cur = mDbadapter.fetchAllItems(user_id);
 			if(data_cur.getCount() >0)
 			{ 
 				if(data_cur.moveToFirst()) 
@@ -374,76 +393,84 @@ public class MainActivity extends Activity {
 					Toast.LENGTH_SHORT).show();       
 
 
-			data_cur.close();   
-		}
-		catch (Exception e) {
-			// TODO: handle exception
-			String str = e.getMessage();
-			String sss = str;
-		}
-
-	}
-
-	private void fillDataByPriority() {
-
-		try
-		{
-			ToDoArrayList = new ArrayList<HashMap<String,String>>();
-			DataSource mDbadapter = new DataSource(this);
-			mDbadapter.open(); 
-			Cursor data_cur = mDbadapter.fetchAllItemsSortedByPriority(user_id);
-			if(data_cur.getCount() >0)
-			{ 
-				if(data_cur.moveToFirst()) 
-				{ 
-					do   
-					{
-						HashMap<String,String> map = new HashMap<String, String>(); 
-
-						String item_id = data_cur.getString(0);
-						String item = data_cur.getString(1);
-						String due_date = data_cur.getString(2);     
-						String description = data_cur.getString(3);
-						String priority = data_cur.getString(4);
-						String status = data_cur.getString(5);
-
-						map.put(ITEM_id, item_id);
-						map.put(ITEM, item);
-						map.put(DUE_DATE, due_date);
-						map.put(DESCRIPTION, description);
-						map.put(PRIOITY, priority);
-						map.put(STATUS, status);
-						ToDoArrayList.add(map);
-
-					}while (data_cur.moveToNext());
-
-				}
-			}
-
-			else Toast.makeText(this, 
-					"No Records", 
-					Toast.LENGTH_SHORT).show();       
-
-
-			data_cur.close();   
+			data_cur.close();  
+//			if (datasource != null) {
+//				datasource.close();
+//			}
 		}
 		catch (Exception e) {
 			// TODO: handle exception
 		}
 
 	}
+
+//	private void fillDataByPriority() {
+//
+//		try
+//		{
+//			ToDoArrayList = new ArrayList<HashMap<String,String>>();
+//			DataSource mDbadapter = new DataSource(this);
+//			mDbadapter.open(); 
+//			Cursor data_cur = mDbadapter.fetchAllItemsSortedByPriority(user_id);
+//			if(data_cur.getCount() >0)
+//			{ 
+//				if(data_cur.moveToFirst()) 
+//				{ 
+//					do   
+//					{
+//						HashMap<String,String> map = new HashMap<String, String>(); 
+//
+//						String item_id = data_cur.getString(0);
+//						String item = data_cur.getString(1);
+//						String due_date = data_cur.getString(2);     
+//						String description = data_cur.getString(3);
+//						String priority = data_cur.getString(4);
+//						String status = data_cur.getString(5);
+//
+//						map.put(ITEM_id, item_id);
+//						map.put(ITEM, item);
+//						map.put(DUE_DATE, due_date);
+//						map.put(DESCRIPTION, description);
+//						map.put(PRIOITY, priority);
+//						map.put(STATUS, status);
+//						ToDoArrayList.add(map);
+//
+//					}while (data_cur.moveToNext());
+//
+//				}
+//			}
+//
+//			else Toast.makeText(this, 
+//					"No Records", 
+//					Toast.LENGTH_SHORT).show();       
+//
+//
+//			
+//			data_cur.close();   
+//			if (datasource != null) {
+//				datasource.close();
+//			}
+//		}
+//		catch (Exception e) {
+//			// TODO: handle exception
+//		}
+//
+//	}
 
 	private void logout()
 	{
 		final AlertDialog Hide_dialog = new AlertDialog.Builder(MainActivity.this).create();
-		Hide_dialog.setTitle("Confirm Hide");
+		Hide_dialog.setTitle("Confirm Logout");
 		Hide_dialog.setMessage("Are you sure you want to logout?");
 
 		Hide_dialog.setButton("Yes", new DialogInterface.OnClickListener() {
 
 			public void onClick(DialogInterface dialog, int which) {
 				// TODO Auto-generated method stub
-				moveTaskToBack(true);
+				final Intent intent = new Intent(getBaseContext(), LoginActivity.class);
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				startActivity(intent);
+				//moveTaskToBack(true);
 			}
 		});
 
@@ -481,7 +508,13 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		ListView lst = (ListView)findViewById(R.id.main_listView);
+		
+		if (datasource != null) {
+			datasource.open();
+		}
+		//ListView lst = (ListView)findViewById(R.id.main_listView);
+		EfficientAdapter adapter = new EfficientAdapter(this);
+		adapter.notifyDataSetChanged();
 	}
 
 

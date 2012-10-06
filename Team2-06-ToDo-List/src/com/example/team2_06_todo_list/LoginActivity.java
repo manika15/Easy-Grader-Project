@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class LoginActivity extends Activity {
 
@@ -51,6 +52,7 @@ public class LoginActivity extends Activity {
 						if(!(saved_user_id.equals(null))|| !(saved_user_id.equals(""))){
 							Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 							intent.putExtra("user_id", saved_user_id);
+							intent.putExtra("str_sortingFlag", "date");
 							startActivity(intent); 
 						}
 					}
@@ -199,5 +201,30 @@ public class LoginActivity extends Activity {
 
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (datasource != null) {
+			datasource.close();
+		}
+	
+	}
+	
+	@Override
+    protected void onResume() {
+        super.onResume();
+        if (datasource != null) {
+			datasource.open();
+		}
+
+     // get the instances of the username and password field 
+  	       EditText txtUsername = (EditText)findViewById(R.id.EditText_username);
+  	       EditText txtPassword = (EditText)findViewById(R.id.EditText_Password);
+  	       
+  	       txtUsername.setText("");
+  	       txtPassword.setText("");
+  	       
+        
+    }
 
 }

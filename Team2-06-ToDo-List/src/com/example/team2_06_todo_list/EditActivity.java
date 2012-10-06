@@ -9,17 +9,14 @@ import com.example.database.DataSource;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,6 +35,7 @@ public class EditActivity extends Activity {
 	long startDateFinalValue=0;
 	String user_id;
 	String item_id;
+	String str_sortingFlag;
 
 	static final String ITEM_id = "item_id";
 	static final String ITEM = "item";
@@ -64,6 +62,7 @@ public class EditActivity extends Activity {
 		// Get data via the key
 		user_id = extras.getString("user_id");
 		item_id = extras.getString("item_id");
+		str_sortingFlag = extras.getString("str_sortingFlag");
 
 		fillData();
 		
@@ -95,6 +94,7 @@ public class EditActivity extends Activity {
 				add_item();
 				Intent intent = new Intent(EditActivity.this, MainActivity.class);
 				intent.putExtra("user_id", user_id);
+				intent.putExtra("str_sortingFlag", str_sortingFlag);
 				startActivity(intent);
 			}
 		});
@@ -119,7 +119,7 @@ public class EditActivity extends Activity {
 		String str_Desc = txt_desc.getText().toString();
 		String DueDate = DateFormat.format("MM dd yyyy", startDateFinalValue).toString();
 		String Priority = spinner_priority.getSelectedItem().toString();
-		datasource.UpdateItem(item_id, str_Item, DueDate, str_Desc, Priority);
+		datasource.UpdateItem(item_id, str_Item, DueDate, str_Desc, Priority, null);
 
 	}
 
@@ -207,8 +207,6 @@ public class EditActivity extends Activity {
 		}
 		catch (Exception e) {
 			// TODO: handle exception
-			String str = e.getMessage();
-			String sss = str;
 		}
 
 	}

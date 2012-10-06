@@ -75,7 +75,7 @@ public class DataSource {
 	//
 	//		}
 
-	public boolean UpdateItem(String id, String item, String due_date, String description, String priority) {
+	public boolean UpdateItem(String id, String item, String due_date, String description, String priority, String status) {
 		ContentValues cv = new ContentValues();
 		if (item != null)
 			cv.put(MySQLiteHelper.COLUMN_ITEM, item);
@@ -85,7 +85,8 @@ public class DataSource {
 			cv.put(MySQLiteHelper.COLUMN_DESC, description);
 		if (priority != null)
 			cv.put(MySQLiteHelper.COLUMN_PRIORITY, priority);
-
+		if (status != null)
+			cv.put(MySQLiteHelper.COLUMN_STATUS, status);
 		return database.update(MySQLiteHelper.TABLE_ToDoList, cv, MySQLiteHelper.COLUMN_ID + " = " + id, null) > 0;
 	}
 
@@ -103,7 +104,7 @@ public class DataSource {
 	//		}
 
 	public Cursor fetchAllItems(String id) {
-		String query = "SELECT item_id, item, duedate, description, priority, status FROM todo where reference_id = " + id + " order by duedate asc";
+		String query = "SELECT item_id, item, duedate, description, priority, status FROM todo where reference_id = " + id + " and status = 1 order by duedate desc";
 		return database.rawQuery(query,null);
 	}
 

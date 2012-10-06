@@ -2,32 +2,29 @@ package com.example.team2_06_todo_list;
 
 import java.util.Calendar;
 
-import com.example.database.DataSource;
-
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.database.DataSource;
 
 public class AddActivity extends Activity {
 
@@ -40,6 +37,7 @@ public class AddActivity extends Activity {
 	long startDateFinalValue=0;
 
 	String user_id;
+	String str_sortingFlag;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +53,7 @@ public class AddActivity extends Activity {
 		}
 		// Get data via the key
 		user_id = extras.getString("user_id");
+		str_sortingFlag = extras.getString("str_sortingFlag");
 
 		ImageButton pickStartDate = (ImageButton) findViewById(R.id.ImageButton_add_DueDate);
 		pickStartDate.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +74,32 @@ public class AddActivity extends Activity {
 		//set the start time to the current date
 		//        final TextView startTimeLabel = (TextView) findViewById(R.id.TextView_CreateInvite_StartTime_Label);
 		//        startTimeLabel.setText("(pick start time)");
+		
+		final Spinner spinner_priority = (Spinner)findViewById(R.id.spinner_add_Priority);
+		spinner_priority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View itemSelected, int selectedItemPosition,
+                    long selectedId) {
+            	
+            	ImageView img_icon = (ImageView)findViewById(R.id.image_add_Priority);
+        		if(selectedItemPosition == 0)
+        		{
+        			img_icon.setImageResource(R.drawable.red);
+        		}
+        		else if(selectedItemPosition == 1)
+        		{
+        			img_icon.setImageResource(R.drawable.blue);
+        		}
+        		else if(selectedItemPosition == 2)
+        		{
+        			img_icon.setImageResource(R.drawable.yellow);
+        		}
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+		
+		
 
 		Button btn_save = (Button)findViewById(R.id.btn_add_save);
 		btn_save.setOnClickListener(new OnClickListener() {
@@ -90,6 +115,7 @@ public class AddActivity extends Activity {
 					add_item();
 					Intent intent = new Intent(AddActivity.this, MainActivity.class);
 					intent.putExtra("user_id", user_id);
+					intent.putExtra("str_sortingFlag", str_sortingFlag);
 					startActivity(intent);
 
 

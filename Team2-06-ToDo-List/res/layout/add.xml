@@ -50,7 +50,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:hint="@string/login_page_txt_usrname_hint"
                 android:inputType="textPersonName"
                 android:maxLines="1" >
             </EditText>
@@ -63,11 +62,30 @@
                 android:textColor="@android:color/black" >
             </TextView>
 
-            <Spinner
+            <LinearLayout 
+                 android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:background="@color/green_background"
+			    android:orientation="horizontal" >
+			    
+                <Spinner
                 android:id="@+id/spinner_add_Priority"
-                android:layout_width="fill_parent"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:entries="@array/priority" />
+            	
+                <ImageView 
+                     android:id="@+id/image_add_Priority"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/priority"
+                android:src="@drawable/red"
+                android:paddingTop="5dp">
+                    
+                </ImageView>
+            
+            </LinearLayout>
+            
 
             <TextView
                 android:layout_width="wrap_content"

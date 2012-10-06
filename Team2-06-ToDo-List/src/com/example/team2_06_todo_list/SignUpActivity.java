@@ -53,6 +53,7 @@ public class SignUpActivity extends Activity {
 				{
 					Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
 					intent.putExtra("user_id", saved_user_id);
+					intent.putExtra("str_sortingFlag", "date");
 					startActivity(intent);
 					finish();
 				}
