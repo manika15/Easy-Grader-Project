@@ -1,2 +1,1 @@
-Easy Grader Project
-===================
+
