@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 RepTeam2.06
 ===========
 
@@ -12,3 +13,6 @@ Easy-Grader-Project
 Easy Grader Project
 ===================
 >>>>>>> c440ee7318e778231907888eaec8312bc55282f7
+=======
+
+>>>>>>> ea64bf15670559f8f3777a15ebe6526826391c46
